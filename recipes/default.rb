@@ -2,6 +2,7 @@
 # Cookbook Name:: rabbitmq
 # Recipe:: default
 #
+# Copyright 2012, getaroom
 # Copyright 2009, Benjamin Black
 # Copyright 2009-2011, Opscode, Inc.
 #
@@ -37,6 +38,39 @@ template "/etc/rabbitmq/rabbitmq-env.conf" do
   mode 0644
   notifies :restart, "service[rabbitmq-server]"
 end
+
+group "rabbitmq" do
+  system true
+end
+
+user "rabbitmq" do
+  comment "RabbitMQ messaging server"
+  group "rabbitmq"
+  home "/var/lib/rabbitmq"
+  system true
+end
+
+if node['rabbitmq']['logdir']
+  directory node['rabbitmq']['logdir'] do
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0755
+    recursive true
+    action :create
+  end
+
+  link "/var/log/rabbitmq" do
+    to node['rabbitmq']['logdir']
+  end
+end
+
+directory node['rabbitmq']['mnesiadir'] do
+  owner "rabbitmq"
+  group "rabbitmq"
+  mode 0755
+  recursive true
+  action :create
+end if node['rabbitmq']['mnesiadir']
 
 case node['platform']
 when "debian", "ubuntu"
