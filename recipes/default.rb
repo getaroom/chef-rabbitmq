@@ -72,19 +72,19 @@ directory node['rabbitmq']['mnesiadir'] do
   action :create
 end if node['rabbitmq']['mnesiadir']
 
+download_base = "https://www.rabbitmq.com/releases/rabbitmq-server/v#{node['rabbitmq']['version'].split('-', 2).first}"
+
 case node['platform']
 when "debian", "ubuntu"
-  # use the RabbitMQ repository instead of Ubuntu or Debian's
-  # because there are very useful features in the newer versions
-  apt_repository "rabbitmq" do
-    uri "http://www.rabbitmq.com/debian/"
-    distribution "testing"
-    components ["main"]
-    key "http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
-    action :add
+  package_file = "rabbitmq-server_#{node['rabbitmq']['version']}_all.deb"
+  cached_package_file = "#{Chef::Config[:file_cache_path]}/#{package_file}"
+
+  remote_file cached_package_file do
+    source "#{download_base}/#{package_file}"
+    action :create_if_missing
   end
 
-  package "rabbitmq-server"
+  dpkg_package cached_package_file
 
   template "/etc/default/rabbitmq-server" do
     source "rabbitmq-server-default.erb"
@@ -94,25 +94,27 @@ when "debian", "ubuntu"
     notifies :restart, "service[rabbitmq-server]"
   end
 when "redhat", "centos", "scientific", "amazon"
-  remote_file "#{Chef::Config[:file_cache_path]}/rabbitmq-server-2.6.1-1.noarch.rpm" do
-    source "https://www.rabbitmq.com/releases/rabbitmq-server/v2.6.1/rabbitmq-server-2.6.1-1.noarch.rpm"
+  package_file = "rabbitmq-server-#{node['rabbitmq']['version']}.noarch.rpm"
+  cached_package_file = "#{Chef::Config[:file_cache_path]}/#{package_file}"
+
+  remote_file cached_package_file do
+    source "#{download_base}/#{package_file}"
     action :create_if_missing
   end
-  rpm_package "#{Chef::Config[:file_cache_path]}/rabbitmq-server-2.6.1-1.noarch.rpm" do
-    action :install
-  end
+
+  rpm_package cached_package_file
 end
 
 if node['rabbitmq']['cluster']
-    # If this already exists, don't do anything
-    # Changing the cookie will stil have to be a manual process
-    template "/var/lib/rabbitmq/.erlang.cookie" do
-      source "doterlang.cookie.erb"
-      owner "rabbitmq"
-      group "rabbitmq"
-      mode 0400
-      not_if { File.exists? "/var/lib/rabbitmq/.erlang.cookie" }
-    end
+  # If this already exists, don't do anything
+  # Changing the cookie will stil have to be a manual process
+  template "/var/lib/rabbitmq/.erlang.cookie" do
+    source "doterlang.cookie.erb"
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0400
+    not_if { File.exists? "/var/lib/rabbitmq/.erlang.cookie" }
+  end
 end
 
 template "/etc/rabbitmq/rabbitmq.config" do

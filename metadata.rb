@@ -4,8 +4,6 @@ license           "Apache 2.0"
 description       "Installs and configures RabbitMQ server"
 version           "1.4.1"
 recipe            "rabbitmq", "Install and configure RabbitMQ"
-depends           "apt", ">= 1.1"
-depends           "yum", ">= 0.5.0"
 depends           "erlang", ">= 0.9"
 
 %w{ubuntu debian redhat centos scientific}.each do |os|
@@ -45,6 +43,11 @@ attribute "rabbitmq/mnesiadir",
 attribute "rabbitmq/max_open_files",
   :display_name => "RabbitMQ max open files",
   :description => "The max file desciptor limit on Debian and Ubuntu systems."
+
+attribute "rabbitmq/version",
+  :display_name => "RabbitMQ package version",
+  :description => "The full RabbitMQ package version to install.",
+  :default => "2.6.1-1"
 
 attribute "rabbitmq/cluster",
   :display_name => "RabbitMQ clustering",

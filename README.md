@@ -6,9 +6,9 @@ Recipes
 =======
 default
 -------
-Installs `rabbitmq-server` from RabbitMQ.com's APT repository or the RPM directly (there is no yum repo). The distribution-provided versions were quite old and newer features were needed.
+Installs `rabbitmq-server` from RabbitMQ.com's DEB or RPM packages directly. The distribution-provided versions were quite old and newer features were needed.
 
-Cluster recipe is now combined with default. Recipe will now auto-cluster. Set the :cluster attribute to true, :cluster_disk_nodes array of `node@host` strings that describe which you want to be disk nodes and then set an alphanumeric string for the :erlang_cookie. 
+Cluster recipe is now combined with default. Recipe will now auto-cluster. Set the :cluster attribute to true, :cluster_disk_nodes array of `node@host` strings that describe which you want to be disk nodes and then set an alphanumeric string for the :erlang_cookie.
 
 To enable SSL turn :ssl to true and set the paths to your cacert, cert and key files.
 
