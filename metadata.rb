@@ -4,7 +4,6 @@ license           "Apache 2.0"
 description       "Installs and configures RabbitMQ server"
 version           "1.4.1"
 recipe            "rabbitmq", "Install and configure RabbitMQ"
-recipe            "rabbitmq::cluster", "Set up RabbitMQ clustering."
 depends           "apt", ">= 1.1"
 depends           "yum", ">= 0.5.0"
 depends           "erlang", ">= 0.9"
@@ -42,6 +41,10 @@ attribute "rabbitmq/logdir",
 attribute "rabbitmq/mnesiadir",
   :display_name => "RabbitMQ Mnesia database directory",
   :description => "Path to the directory for Mnesia database files."
+
+attribute "rabbitmq/max_open_files",
+  :display_name => "RabbitMQ max open files",
+  :description => "The max file desciptor limit on Debian and Ubuntu systems."
 
 attribute "rabbitmq/cluster",
   :display_name => "RabbitMQ clustering",

@@ -83,7 +83,16 @@ when "debian", "ubuntu"
     key "http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
     action :add
   end
+
   package "rabbitmq-server"
+
+  template "/etc/default/rabbitmq-server" do
+    source "rabbitmq-server-default.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    notifies :restart, "service[rabbitmq-server]"
+  end
 when "redhat", "centos", "scientific", "amazon"
   remote_file "#{Chef::Config[:file_cache_path]}/rabbitmq-server-2.6.1-1.noarch.rpm" do
     source "https://www.rabbitmq.com/releases/rabbitmq-server/v2.6.1/rabbitmq-server-2.6.1-1.noarch.rpm"

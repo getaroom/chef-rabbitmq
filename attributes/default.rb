@@ -5,6 +5,7 @@ default['rabbitmq']['port']  = nil
 default['rabbitmq']['config'] = nil
 default['rabbitmq']['logdir'] = nil
 default['rabbitmq']['mnesiadir'] = nil
+default['rabbitmq']['max_open_files'] = nil
 
 # config file location
 # http://www.rabbitmq.com/configure.html#define-environment-variables
