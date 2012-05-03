@@ -2,6 +2,7 @@
 # Cookbook Name:: rabbitmq
 # Provider:: user
 #
+# Copyright 2012, getaroom
 # Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -62,5 +63,13 @@ action :clear_permissions do
       Chef::Log.info "Clearing RabbitMQ user permissions for '#{new_resource.user}'."
       new_resource.updated_by_last_action(true)
     end
+  end
+end
+
+action :set_tags do
+  execute "rabbitmqctl set_user_tags #{new_resource.user} #{new_resource.tags.join(' ')}" do
+    not_if "rabbitmqctl list_users | egrep '#{Regexp.escape(new_resource.user)}.*\[#{Regexp.escape(new_resource.tags.join(', '))}\]'"
+    Chef::Log.info "Setting RabbitMQ user tags for '#{new_resource.user}'."
+    new_resource.updated_by_last_action(true)
   end
 end

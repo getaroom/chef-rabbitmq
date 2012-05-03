@@ -22,12 +22,13 @@ There are several LWRPs for interacting with RabbitMQ.
 
 user
 ----
-Adds and deletes users, fairly simplistic permissions management.
+Adds and deletes users, fairly simplistic permissions management, user tags.
 
 - `:add` adds a `user` with a `password`
 - `:delete` deletes a `user`
 - `:set_permissions` sets the `permissions` for a `user`, `vhost` is optional
 - `:clear_permissions` clears the permissions for a `user`
+- `:set_tags` sets tags for a `user`
 
 ### Examples
 ``` ruby
@@ -44,6 +45,11 @@ rabbitmq_user "nova" do
   vhost "/nova"
   permissions "\".*\" \".*\" \".*\""
   action :set_permissions
+end
+
+rabbitmq_user "nova" do
+  tags ["administrator"]
+  action :set_tags
 end
 ```
 
