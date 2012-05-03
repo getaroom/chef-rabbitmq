@@ -12,9 +12,13 @@ Cluster recipe is now combined with default. Recipe will now auto-cluster. Set t
 
 To enable SSL turn :ssl to true and set the paths to your cacert, cert and key files.
 
+plugins
+-------
+Enables, or disables, RabbitMQ plugins specified in the :plugins attribute.
+
 Resources/Providers
 ===================
-There are 2 LWRPs for interacting with RabbitMQ.
+There are several LWRPs for interacting with RabbitMQ.
 
 user
 ----
@@ -54,6 +58,21 @@ Adds and deletes vhosts.
 ``` ruby
 rabbitmq_vhost "/nova" do
   action :add
+end
+```
+
+plugin
+------
+Enables and disables plugins.
+
+- `:enable` enables a `plugin`
+- `:disable` disables a `plugin`
+
+### Example
+``` ruby
+rabbitmq_plugin "rabbitmq_management" do
+  action :enable
+  notifies :restart, "service[rabbitmq-server]"
 end
 ```
 
