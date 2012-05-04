@@ -16,6 +16,10 @@ plugins
 -------
 Enables, or disables, RabbitMQ plugins specified in the :plugins attribute.
 
+users
+-----
+Adds, or deletes, RabbitMQ users specified in the :rabbitmq_users data bag.
+
 Resources/Providers
 ===================
 There are several LWRPs for interacting with RabbitMQ.
