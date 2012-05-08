@@ -12,6 +12,31 @@ Cluster recipe is now combined with default. Recipe will now auto-cluster. Set t
 
 To enable SSL turn :ssl to true and set the paths to your cacert, cert and key files.
 
+apps
+----
+Adds vhosts, users, and sets permissions and user tags based on the apps data bag.
+
+### Example
+```json
+{
+  "id": "my_app",
+  "rabbitmq_role": ["my_app_rabbitmq"],
+  "rabbitmq_vhosts": {
+    "production": [
+      {
+        "vhost": "/my_app_production",
+        "users": [
+          {
+            "user": "guest",
+            "permissions": "\".*\" \".*\" \".*\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 plugins
 -------
 Enables, or disables, RabbitMQ plugins specified in the :plugins attribute.
