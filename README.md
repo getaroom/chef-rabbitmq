@@ -14,7 +14,7 @@ To enable SSL turn :ssl to true and set the paths to your cacert, cert and key f
 
 apps
 ----
-Adds vhosts, users, and sets permissions and user tags based on the apps data bag.
+Adds vhosts and users based on the apps data bag.
 
 ### Example
 ```json
@@ -25,12 +25,8 @@ Adds vhosts, users, and sets permissions and user tags based on the apps data ba
     "production": [
       {
         "vhost": "/my_app_production",
-        "users": [
-          {
-            "user": "guest",
-            "permissions": "\".*\" \".*\" \".*\""
-          }
-        ]
+        "user": "guest",
+        "password": "guest"
       }
     ]
   }

@@ -22,17 +22,15 @@ search(:apps) do |app|
     Array(app['rabbitmq_vhosts'][node.chef_environment]).each do |app_vhost|
       rabbitmq_vhost app_vhost['vhost']
 
-      Array(app_vhost['users']).each do |user|
-        user_actions = []
-        user_actions << :add if user['password']
-        user_actions << :set_tags if user['tags']
-        user_actions << :set_permissions
+      rabbitmq_user app_vhost['user'] do
+        vhost app_vhost['vhost']
+        permissions %{".*" ".*" ".*"}
 
-        rabbitmq_user user['user'] do
-          vhost app_vhost['vhost']
-          permissions user['permissions']
-          password user['password'] if user['password']
-          action user_actions
+        if app_vhost['password']
+          password app_vhost['password']
+          action [:add, :set_permissions]
+        else
+          action :set_permissions
         end
       end
     end
