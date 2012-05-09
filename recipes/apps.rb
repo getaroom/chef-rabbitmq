@@ -18,19 +18,21 @@
 #
 
 search(:apps) do |app|
-  if (node.run_list.roles & Array(app['rabbitmq_role'])).any?
-    Array(app['rabbitmq_vhosts'][node.chef_environment]).each do |app_vhost|
-      rabbitmq_vhost app_vhost['vhost']
+  if (app['rabbitmq_role'] & node.run_list.roles).any?
+    app['rabbitmq_vhosts'].each do |environment, app_vhost|
+      if environment.include? node.chef_environment
+        rabbitmq_vhost app_vhost['vhost']
 
-      rabbitmq_user app_vhost['user'] do
-        vhost app_vhost['vhost']
-        permissions %{".*" ".*" ".*"}
+        rabbitmq_user app_vhost['user'] do
+          vhost app_vhost['vhost']
+          permissions %{".*" ".*" ".*"}
 
-        if app_vhost['password']
-          password app_vhost['password']
-          action [:add, :set_permissions]
-        else
-          action :set_permissions
+          if app_vhost['password']
+            password app_vhost['password']
+            action [:add, :set_permissions]
+          else
+            action :set_permissions
+          end
         end
       end
     end

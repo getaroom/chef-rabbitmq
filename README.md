@@ -22,13 +22,11 @@ Adds vhosts and users based on the apps data bag.
   "id": "my_app",
   "rabbitmq_role": ["my_app_rabbitmq"],
   "rabbitmq_vhosts": {
-    "production": [
-      {
-        "vhost": "/my_app_production",
-        "user": "guest",
-        "password": "guest"
-      }
-    ]
+    "production": {
+      "vhost": "/my_app_production",
+      "user": "guest",
+      "password": "guest"
+    }
   }
 }
 ```
