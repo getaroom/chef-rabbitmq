@@ -72,6 +72,25 @@ directory node['rabbitmq']['mnesiadir'] do
   action :create
 end if node['rabbitmq']['mnesiadir']
 
+if node['rabbitmq']['erlang_cookie']
+  directory "/var/lib/rabbitmq" do
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0755
+    action :create
+  end
+
+  # If this already exists, don't do anything
+  # Changing the cookie will stil have to be a manual process
+  template "/var/lib/rabbitmq/.erlang.cookie" do
+    source "doterlang.cookie.erb"
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0400
+    not_if { File.exists? "/var/lib/rabbitmq/.erlang.cookie" }
+  end
+end
+
 download_base = "https://www.rabbitmq.com/releases/rabbitmq-server/v#{node['rabbitmq']['version'].split('-', 2).first}"
 
 case node['platform']
@@ -103,18 +122,6 @@ when "redhat", "centos", "scientific", "amazon"
   end
 
   rpm_package cached_package_file
-end
-
-if node['rabbitmq']['cluster']
-  # If this already exists, don't do anything
-  # Changing the cookie will stil have to be a manual process
-  template "/var/lib/rabbitmq/.erlang.cookie" do
-    source "doterlang.cookie.erb"
-    owner "rabbitmq"
-    group "rabbitmq"
-    mode 0400
-    not_if { File.exists? "/var/lib/rabbitmq/.erlang.cookie" }
-  end
 end
 
 template "/etc/rabbitmq/rabbitmq.config" do
