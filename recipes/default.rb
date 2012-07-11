@@ -2,6 +2,7 @@
 # Cookbook Name:: rabbitmq
 # Recipe:: default
 #
+# Copyright 2012, getaroom
 # Copyright 2009, Benjamin Black
 # Copyright 2009-2011, Opscode, Inc.
 #
@@ -40,24 +41,29 @@ template "/etc/rabbitmq/rabbitmq-env.conf" do
   notifies :restart, "service[rabbitmq-server]"
 end
 
+package_source_base = "https://www.rabbitmq.com/releases/rabbitmq-server/v#{node['rabbitmq']['version']}"
+
 case node[:platform]
 when "debian", "ubuntu"
-  # use the RabbitMQ repository instead of Ubuntu or Debian's
-  # because there are very useful features in the newer versions
-  apt_repository "rabbitmq" do
-    uri "http://www.rabbitmq.com/debian/"
-    distribution "testing"
-    components ["main"]
-    key "http://www.rabbitmq.com/rabbitmq-signing-key-public.asc"
-    action :add
-  end
-  package "rabbitmq-server"
-when "redhat", "centos", "scientific", "amazon"
-  remote_file "/tmp/rabbitmq-server-#{node[:rabbitmq][:version]}-1.noarch.rpm" do
-    source "https://www.rabbitmq.com/releases/rabbitmq-server/v#{node[:rabbitmq][:version]}/rabbitmq-server-#{node[:rabbitmq][:version]}-1.noarch.rpm"
+  package_file = "rabbitmq-server_#{node['rabbitmq']['version']}-1_all.deb"
+
+  remote_file "#{Chef::Config[:file_cache_path]}/#{package_file}" do
+    source "#{package_source_base}/#{package_file}"
     action :create_if_missing
   end
-  rpm_package "/tmp/rabbitmq-server-#{node[:rabbitmq][:version]}-1.noarch.rpm" do
+
+  dpkg_package "#{Chef::Config[:file_cache_path]}/#{package_file}" do
+    action :install
+  end
+when "redhat", "centos", "scientific", "amazon"
+  package_file = "rabbitmq-server-#{node['rabbitmq']['version']}-1.noarch.rpm"
+
+  remote_file "#{Chef::Config[:file_cache_path]}/#{package_file}" do
+    source "#{package_source_base}/#{package_file}"
+    action :create_if_missing
+  end
+
+  rpm_package "#{Chef::Config[:file_cache_path]}/#{package_file}" do
     action :install
   end
 end
