@@ -5,6 +5,7 @@ description       "Installs and configures RabbitMQ server"
 version           "1.4.1"
 recipe            "rabbitmq", "Install and configure RabbitMQ"
 recipe            "rabbitmq::plugins", "Enables and disables RabbitMQ plugins"
+recipe            "rabbitmq::users", "Add and delete RabbitMQ users"
 depends           "erlang", ">= 0.9"
 
 %w{ubuntu debian redhat centos scientific}.each do |os|
@@ -71,3 +72,13 @@ attribute "rabbitmq/plugins",
   :description => "The plugins to enable with the rabbitmq::plugins recipe.",
   :default => [],
   :type => "array"
+
+attribute "rabbitmq/users_data_bag",
+  :display_name => "RabbitMQ users data bags",
+  :description => "Name of the data bag containing RabbitMQ users.",
+  :default => "rabbitmq_users"
+
+attribute "rabbitmq/users_data_bag_encrypted",
+  :display_name => "RabbitMQ users data bag encrypted",
+  :description => "Whether the RabbitMQ users data bag is encrypted.",
+  :default => "no"

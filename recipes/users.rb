@@ -1,9 +1,8 @@
 #
 # Cookbook Name:: rabbitmq
-# Resource:: user
+# Recipe:: users
 #
 # Copyright 2012, getaroom
-# Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,10 +17,27 @@
 # limitations under the License.
 #
 
-actions :add, :delete, :set_permissions, :clear_permissions, :set_tags
+users = if node['rabbitmq']['users_data_bag_encrypted']
+  data_bag(node['rabbitmq']['users_data_bag']).map do |user_id|
+    Chef::EncryptedDataBagItem.load(node['rabbitmq']['users_data_bag'], user_id)
+  end
+else
+  search(node['rabbitmq']['users_data_bag'], "*:*")
+end
 
-attribute :user, :kind_of => String, :name_attribute => true
-attribute :password, :kind_of => String
-attribute :vhost, :kind_of => String, :default => "/"
-attribute :permissions, :kind_of => String
-attribute :tags, :kind_of => Array, :default => []
+users.each do |user|
+  rabbitmq_user user['id'] do
+    if user['action'] == "delete"
+      action :delete
+    else
+      password user['password']
+
+      if user['tags']
+        tags user['tags']
+        action [:add, :set_tags]
+      else
+        action :add
+      end
+    end
+  end
+end
