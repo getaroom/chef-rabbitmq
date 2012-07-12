@@ -18,9 +18,10 @@
 # limitations under the License.
 #
 
-actions :add, :delete, :set_permissions, :clear_permissions
+actions :add, :delete, :set_permissions, :clear_permissions, :set_tags
 
 attribute :user, :kind_of => String, :name_attribute => true
 attribute :password, :kind_of => String
 attribute :vhost, :kind_of => String, :default => "/"
 attribute :permissions, :kind_of => String
+attribute :tags, :kind_of => Array, :default => []

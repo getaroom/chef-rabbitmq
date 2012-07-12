@@ -65,3 +65,11 @@ action :clear_permissions do
     end
   end
 end
+
+action :set_tags do
+  execute "rabbitmqctl set_user_tags #{new_resource.user} #{new_resource.tags.join(' ')}" do
+    not_if "rabbitmqctl list_users | egrep '#{Regexp.escape(new_resource.user)}[[:space:]]\\[#{Regexp.escape(new_resource.tags.join(', '))}\\]'"
+    Chef::Log.info "Setting RabbitMQ user tags for '#{new_resource.user}'."
+    new_resource.updated_by_last_action(true)
+  end
+end
