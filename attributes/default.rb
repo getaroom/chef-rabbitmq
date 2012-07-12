@@ -5,6 +5,7 @@ default[:rabbitmq][:port]  = nil
 default[:rabbitmq][:config] = nil
 default[:rabbitmq][:logdir] = nil
 default[:rabbitmq][:mnesiadir] = nil
+default[:rabbitmq][:max_open_files] = nil
 
 # RabbitMQ version to install for "redhat", "centos", "scientific", and "amazon". We default to
 # 2.6.1, because that was what was installed in the previous version of the cookbook.

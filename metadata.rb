@@ -63,3 +63,6 @@ attribute "rabbitmq/erlang_cookie",
   :display_name => "RabbitMQ Erlang cookie",
   :description => "Access cookie for clustering nodes.  There is no default."
 
+attribute "rabbitmq/max_open_files",
+  :display_name => "RabbitMQ max open files",
+  :description => "The max file desciptor limit on Debian and Ubuntu systems."

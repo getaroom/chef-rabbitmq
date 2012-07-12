@@ -2,6 +2,7 @@
 # Cookbook Name:: rabbitmq
 # Recipe:: default
 #
+# Copyright 2012, getaroom
 # Copyright 2009, Benjamin Black
 # Copyright 2009-2011, Opscode, Inc.
 #
@@ -52,6 +53,14 @@ when "debian", "ubuntu"
     action :add
   end
   package "rabbitmq-server"
+
+  template "/etc/default/rabbitmq-server" do
+    source "rabbitmq-server-default.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    notifies :restart, "service[rabbitmq-server]"
+  end
 when "redhat", "centos", "scientific", "amazon"
   remote_file "/tmp/rabbitmq-server-#{node[:rabbitmq][:version]}-1.noarch.rpm" do
     source "https://www.rabbitmq.com/releases/rabbitmq-server/v#{node[:rabbitmq][:version]}/rabbitmq-server-#{node[:rabbitmq][:version]}-1.noarch.rpm"
