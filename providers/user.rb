@@ -37,18 +37,16 @@ action :delete do
 end
 
 action :set_permissions do
-  if new_resource.vhost
-    execute "rabbitmqctl set_permissions -p #{new_resource.vhost} #{new_resource.user} #{new_resource.permissions}" do
-      not_if "rabbitmqctl list_user_permissions | grep #{new_resource.user}"
-      Chef::Log.info "Setting RabbitMQ user permissions for '#{new_resource.user}' on vhost #{new_resource.vhost}."
-      new_resource.updated_by_last_action(true)
-    end
-  else
-    execute "rabbitmqctl set_permissions #{new_resource.user} #{new_resource.permissions}" do
-      not_if "rabbitmqctl list_user_permissions | grep #{new_resource.user}"
-      Chef::Log.info "Setting RabbitMQ user permissions for '#{new_resource.user}'."
-      new_resource.updated_by_last_action(true)
-    end
+  permissions_pattern = new_resource.permissions.split.map do |permission|
+    Regexp.escape permission.gsub(/^\"(.*)\"$/, "\\1")
+  end.join("[[:space:]]")
+
+  pattern = "^#{Regexp.escape(new_resource.vhost)}[[:space:]]#{permissions_pattern}"
+
+  execute "rabbitmqctl set_permissions -p #{new_resource.vhost} #{new_resource.user} #{new_resource.permissions}" do
+    not_if "rabbitmqctl list_user_permissions #{new_resource.user} | egrep '#{pattern}'"
+    Chef::Log.info "Setting RabbitMQ user permissions for '#{new_resource.user}' on vhost #{new_resource.vhost}."
+    new_resource.updated_by_last_action(true)
   end
 end
 

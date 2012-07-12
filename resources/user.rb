@@ -2,6 +2,7 @@
 # Cookbook Name:: rabbitmq
 # Resource:: user
 #
+# Copyright 2012, getaroom
 # Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,5 +22,5 @@ actions :add, :delete, :set_permissions, :clear_permissions
 
 attribute :user, :kind_of => String, :name_attribute => true
 attribute :password, :kind_of => String
-attribute :vhost, :kind_of => String
+attribute :vhost, :kind_of => String, :default => "/"
 attribute :permissions, :kind_of => String
