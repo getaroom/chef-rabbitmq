@@ -14,7 +14,7 @@ To enable SSL turn :ssl to true and set the paths to your cacert, cert and key f
 
 Resources/Providers
 ===================
-There are 2 LWRPs for interacting with RabbitMQ.
+There are several LWRPs for interacting with RabbitMQ.
 
 user
 ----
@@ -57,6 +57,21 @@ rabbitmq_vhost "/nova" do
 end
 ```
 
+plugin
+------
+Enables and disables plugins.
+
+- `:enable` enables a `plugin`
+- `:disable` disables a `plugin`
+
+### Example
+``` ruby
+rabbitmq_plugin "rabbitmq_management" do
+  action :enable
+  notifies :restart, "service[rabbitmq-server]"
+end
+```
+
 Limitations
 ===========
 For an already running cluster, these actions still require manual intervention:
@@ -68,6 +83,7 @@ The rabbitmq::chef recipe was only used for the chef-server cookbook and has bee
 License and Author
 ==================
 
+Author:: Chris Griego <cgriego@gmail.com>
 Author:: Benjamin Black <b@b3k.us>
 Author:: Daniel DeLeo <dan@kallistec.com>
 Author:: Matt Ray <matt@opscode.com>
