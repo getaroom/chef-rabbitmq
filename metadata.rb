@@ -4,7 +4,7 @@ license           "Apache 2.0"
 description       "Installs and configures RabbitMQ server"
 version           "1.4.1"
 recipe            "rabbitmq", "Install and configure RabbitMQ"
-recipe            "rabbitmq::cluster", "Set up RabbitMQ clustering."
+recipe            "rabbitmq::plugins", "Enables and disables RabbitMQ plugins"
 depends           "erlang", ">= 0.9"
 
 %w{ubuntu debian redhat centos scientific}.each do |os|
@@ -65,3 +65,9 @@ attribute "rabbitmq/version",
   :display_name => "RabbitMQ version",
   :description => "The RabbitMQ version to install.",
   :default => "2.8.4"
+
+attribute "rabbitmq/plugins",
+  :display_name => "RabbitMQ plugins",
+  :description => "The plugins to enable with the rabbitmq::plugins recipe.",
+  :default => [],
+  :type => "array"
