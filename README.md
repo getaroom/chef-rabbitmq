@@ -12,6 +12,10 @@ Cluster recipe is now combined with default. Recipe will now auto-cluster. Set t
 
 To enable SSL turn :ssl to true and set the paths to your cacert, cert and key files.
 
+plugins
+-------
+Enables, or disables, RabbitMQ plugins specified in the :plugins attribute.
+
 Resources/Providers
 ===================
 There are several LWRPs for interacting with RabbitMQ.
