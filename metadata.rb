@@ -82,3 +82,7 @@ attribute "rabbitmq/users_data_bag_encrypted",
   :display_name => "RabbitMQ users data bag encrypted",
   :description => "Whether the RabbitMQ users data bag is encrypted.",
   :default => "no"
+
+attribute "rabbitmq/max_open_files",
+  :display_name => "RabbitMQ max open files",
+  :description => "The max file desciptor limit on Debian and Ubuntu systems."

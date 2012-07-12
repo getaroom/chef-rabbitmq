@@ -55,6 +55,14 @@ when "debian", "ubuntu"
   dpkg_package "#{Chef::Config[:file_cache_path]}/#{package_file}" do
     action :install
   end
+
+  template "/etc/default/rabbitmq-server" do
+    source "rabbitmq-server-default.erb"
+    owner "root"
+    group "root"
+    mode 0644
+    notifies :restart, "service[rabbitmq-server]"
+  end
 when "redhat", "centos", "scientific", "amazon"
   package_file = "rabbitmq-server-#{node['rabbitmq']['version']}-1.noarch.rpm"
 
