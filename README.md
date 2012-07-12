@@ -68,6 +68,8 @@ The rabbitmq::chef recipe was only used for the chef-server cookbook and has bee
 License and Author
 ==================
 
+Author:: Morgan Nelson <morgan.nelson@gmail.com>
+Author:: Chris Griego <cgriego@gmail.com>
 Author:: Benjamin Black <b@b3k.us>
 Author:: Daniel DeLeo <dan@kallistec.com>
 Author:: Matt Ray <matt@opscode.com>

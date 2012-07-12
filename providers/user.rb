@@ -2,6 +2,7 @@
 # Cookbook Name:: rabbitmq
 # Provider:: user
 #
+# Copyright 2012, getaroom
 # Copyright 2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +18,12 @@
 # limitations under the License.
 #
 
+include Chef::Mixin::ShellOut
+
 action :add do
-  execute "rabbitmqctl add_user #{new_resource.user} #{new_resource.password}" do
-    not_if "rabbitmqctl list_users | grep #{new_resource.user}"
+  unless shell_out("rabbitmqctl list_users | grep #{new_resource.user}").status.success?
     Chef::Log.info "Adding RabbitMQ user '#{new_resource.user}'."
+    shell_out! "rabbitmqctl add_user #{new_resource.user} #{new_resource.password}"
     new_resource.updated_by_last_action(true)
   end
 end
