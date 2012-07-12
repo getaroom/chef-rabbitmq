@@ -4,7 +4,7 @@ license           "Apache 2.0"
 description       "Installs and configures RabbitMQ server"
 version           "1.4.1"
 recipe            "rabbitmq", "Install and configure RabbitMQ"
-recipe            "rabbitmq::cluster", "Set up RabbitMQ clustering."
+recipe            "rabbitmq::users", "Add and delete RabbitMQ users"
 depends           "apt", ">= 1.1"
 depends           "yum", ">= 0.5.0"
 depends           "erlang", ">= 0.9"
@@ -63,3 +63,12 @@ attribute "rabbitmq/erlang_cookie",
   :display_name => "RabbitMQ Erlang cookie",
   :description => "Access cookie for clustering nodes.  There is no default."
 
+attribute "rabbitmq/users_data_bag",
+  :display_name => "RabbitMQ users data bags",
+  :description => "Name of the data bag containing RabbitMQ users.",
+  :default => "rabbitmq_users"
+
+attribute "rabbitmq/users_data_bag_encrypted",
+  :display_name => "RabbitMQ users data bag encrypted",
+  :description => "Whether the RabbitMQ users data bag is encrypted.",
+  :default => "no"

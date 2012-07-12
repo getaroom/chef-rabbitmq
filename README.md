@@ -12,6 +12,10 @@ Cluster recipe is now combined with default. Recipe will now auto-cluster. Set t
 
 To enable SSL turn :ssl to true and set the paths to your cacert, cert and key files.
 
+users
+-----
+Adds, or deletes, RabbitMQ users specified in the :rabbitmq_users data bag.
+
 Resources/Providers
 ===================
 There are 2 LWRPs for interacting with RabbitMQ.
