@@ -21,7 +21,7 @@ default[:rabbitmq][:default_pass] = 'guest'
 #clustering
 default[:rabbitmq][:cluster] = false
 default[:rabbitmq][:cluster_disk_nodes] = []
-default[:rabbitmq][:erlang_cookie] = 'AnyAlphaNumericStringWillDo'
+default[:rabbitmq][:erlang_cookie] = nil
 
 #ssl
 default[:rabbitmq][:ssl] = false

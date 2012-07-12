@@ -41,6 +41,58 @@ template "/etc/rabbitmq/rabbitmq-env.conf" do
   notifies :restart, "service[rabbitmq-server]"
 end
 
+group "rabbitmq" do
+  system true
+end
+
+user "rabbitmq" do
+  comment "RabbitMQ messaging server"
+  group "rabbitmq"
+  home "/var/lib/rabbitmq"
+  system true
+end
+
+if node['rabbitmq']['logdir']
+  directory node['rabbitmq']['logdir'] do
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0755
+    recursive true
+    action :create
+  end
+
+  link "/var/log/rabbitmq" do
+    to node['rabbitmq']['logdir']
+  end
+end
+
+directory node['rabbitmq']['mnesiadir'] do
+  owner "rabbitmq"
+  group "rabbitmq"
+  mode 0755
+  recursive true
+  action :create
+end if node['rabbitmq']['mnesiadir']
+
+if node['rabbitmq']['erlang_cookie']
+  directory "/var/lib/rabbitmq" do
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0755
+    action :create
+  end
+
+  # If this already exists, don't do anything
+  # Changing the cookie will stil have to be a manual process
+  template "/var/lib/rabbitmq/.erlang.cookie" do
+    source "doterlang.cookie.erb"
+    owner "rabbitmq"
+    group "rabbitmq"
+    mode 0400
+    not_if { File.exists? "/var/lib/rabbitmq/.erlang.cookie" }
+  end
+end
+
 package_source_base = "https://www.rabbitmq.com/releases/rabbitmq-server/v#{node['rabbitmq']['version']}"
 
 case node[:platform]
@@ -74,18 +126,6 @@ when "redhat", "centos", "scientific", "amazon"
   rpm_package "#{Chef::Config[:file_cache_path]}/#{package_file}" do
     action :install
   end
-end
-
-if node[:rabbitmq][:cluster]
-    # If this already exists, don't do anything
-    # Changing the cookie will stil have to be a manual process
-    template "/var/lib/rabbitmq/.erlang.cookie" do
-      source "doterlang.cookie.erb"
-      owner "rabbitmq"
-      group "rabbitmq"
-      mode 0400
-      not_if { File.exists? "/var/lib/rabbitmq/.erlang.cookie" }
-    end
 end
 
 template "/etc/rabbitmq/rabbitmq.config" do
