@@ -22,7 +22,7 @@ include Chef::Mixin::ShellOut
 action :enable do
   unless plugin_enabled?
     Chef::Log.info "Enabling RabbitMQ plugin '#{new_resource.name}'."
-    shell_out! "rabbitmq-plugins enable #{new_resource.name}"
+    shell_out! "rabbitmq-plugins enable #{new_resource.name}", :environment => { "HOME" => "/var/lib/rabbitmq" }
     new_resource.updated_by_last_action(true)
   end
 end
@@ -30,7 +30,7 @@ end
 action :disable do
   if plugin_enabled?
     Chef::Log.info "Disabling RabbitMQ plugin '#{new_resource.name}'."
-    shell_out! "rabbitmq-plugins disable #{new_resource.name}"
+    shell_out! "rabbitmq-plugins disable #{new_resource.name}", :environment => { "HOME" => "/var/lib/rabbitmq" }
     new_resource.updated_by_last_action(true)
   end
 end
@@ -38,5 +38,5 @@ end
 def plugin_enabled?
   name = new_resource.name
   pattern = "^#{Regexp.escape(name)}$"
-  shell_out("rabbitmq-plugins list -m -E '#{pattern}' | grep #{name}").status.success?
+  shell_out("rabbitmq-plugins list -m -E '#{pattern}' | grep #{name}", :environment => { "HOME" => "/var/lib/rabbitmq" }).status.success?
 end
