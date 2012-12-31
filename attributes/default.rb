@@ -6,6 +6,7 @@ default[:rabbitmq][:config] = nil
 default[:rabbitmq][:logdir] = nil
 default[:rabbitmq][:mnesiadir] = nil
 default[:rabbitmq][:max_open_files] = nil
+default[:rabbitmq][:vm_memory_high_watermark] = nil
 
 default[:rabbitmq][:version] = '2.8.4'
 

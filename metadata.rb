@@ -86,3 +86,7 @@ attribute "rabbitmq/users_data_bag_encrypted",
 attribute "rabbitmq/max_open_files",
   :display_name => "RabbitMQ max open files",
   :description => "The max file desciptor limit on Debian and Ubuntu systems."
+
+attribute "rabbitmq/vm_memory_high_watermark",
+  :display_name => "RabbitMQ VM Memory High Watermark",
+  :description => "Memory threshold at which the flow control is triggered."
