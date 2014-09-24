@@ -20,6 +20,6 @@
 node['rabbitmq']['plugins'].each do |plugin_name, plugin_action|
   rabbitmq_plugin plugin_name do
     action plugin_action if plugin_action && plugin_action.length > 0
-    notifies :restart, "service[rabbitmq-server]"
+    # notifies :restart, "service[rabbitmq-server]"
   end
 end

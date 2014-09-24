@@ -38,7 +38,7 @@ template "/etc/rabbitmq/rabbitmq-env.conf" do
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, "service[rabbitmq-server]"
+  # notifies :restart, "service[rabbitmq-server]"
 end
 
 group "rabbitmq" do
@@ -113,7 +113,7 @@ when "debian", "ubuntu"
     owner "root"
     group "root"
     mode 0644
-    notifies :restart, "service[rabbitmq-server]"
+    # notifies :restart, "service[rabbitmq-server]"
   end
 when "redhat", "centos", "scientific", "amazon"
   package_file = "rabbitmq-server-#{node['rabbitmq']['version']}-1.noarch.rpm"
@@ -133,7 +133,7 @@ template "/etc/rabbitmq/rabbitmq.config" do
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, "service[rabbitmq-server]", :immediately
+  # notifies :restart, "service[rabbitmq-server]", :immediately
 end
 
 service "rabbitmq-server" do
