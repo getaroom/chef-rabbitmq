@@ -7,6 +7,7 @@ recipe            "rabbitmq", "Install and configure RabbitMQ"
 recipe            "rabbitmq::plugins", "Enables and disables RabbitMQ plugins"
 recipe            "rabbitmq::users", "Add and delete RabbitMQ users"
 depends           "erlang", ">= 0.9"
+name              "rabbitmq"
 
 %w{ubuntu debian redhat centos scientific}.each do |os|
   supports os
