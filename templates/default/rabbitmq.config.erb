@@ -19,6 +19,9 @@
                     {fail_if_no_peer_cert,false}]},
 <% end %>
     {default_user, <<"<%= node[:rabbitmq][:default_user] %>">>},
+<% if node[:rabbitmq][:loopback_users] %>
+    {loopback_users, [<%= node[:rabbitmq][:loopback_users].map { |u| %Q{<<"#{u}">>} }.join(", ") %>]}
+<% end %>
     {default_pass, <<"<%= node[:rabbitmq][:default_pass] %>">>}
   ]}
 ].

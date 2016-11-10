@@ -18,6 +18,7 @@ default[:rabbitmq][:config] = "/etc/rabbitmq/rabbitmq"
 # rabbitmq.config defaults
 default[:rabbitmq][:default_user] = 'guest'
 default[:rabbitmq][:default_pass] = 'guest'
+default[:rabbitmq][:loopback_users] = nil
 
 #clustering
 default[:rabbitmq][:cluster] = false
