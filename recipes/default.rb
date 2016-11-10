@@ -108,13 +108,29 @@ when "debian", "ubuntu"
     action :install
   end
 
-  template "/etc/default/rabbitmq-server" do
-    source "rabbitmq-server-default.erb"
-    owner "root"
-    group "root"
-    mode 0644
-    # notifies :restart, "service[rabbitmq-server]"
+  if node['init_package'] == 'systemd'
+    directory "/etc/systemd/system/rabbitmq-server.service.d" do
+      owner "root"
+      group "root"
+    end
+
+    template "/etc/systemd/system/rabbitmq-server.service.d/limits.conf" do
+      source "limits.conf.erb"
+      owner "root"
+      group "root"
+      mode 0644
+      # notifies :restart, "service[rabbitmq-server]"
+    end
+  else
+    template "/etc/default/rabbitmq-server" do
+      source "rabbitmq-server-default.erb"
+      owner "root"
+      group "root"
+      mode 0644
+      # notifies :restart, "service[rabbitmq-server]"
+    end
   end
+
 when "redhat", "centos", "scientific", "amazon"
   package_file = "rabbitmq-server-#{node['rabbitmq']['version']}-1.noarch.rpm"
 

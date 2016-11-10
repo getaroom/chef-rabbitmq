@@ -1,0 +1,2 @@
+[Service]
+<% if node['rabbitmq']['max_open_files'] %>LimitNOFILE=<%= node['rabbitmq']['max_open_files'] %><% end %>
