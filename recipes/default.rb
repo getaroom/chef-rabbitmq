@@ -119,7 +119,7 @@ when "debian", "ubuntu"
       owner "root"
       group "root"
       mode 0644
-      # notifies :restart, "service[rabbitmq-server]"
+      notifies :restart, "service[rabbitmq-server]"
     end
   else
     template "/etc/default/rabbitmq-server" do
@@ -127,7 +127,7 @@ when "debian", "ubuntu"
       owner "root"
       group "root"
       mode 0644
-      # notifies :restart, "service[rabbitmq-server]"
+      notifies :restart, "service[rabbitmq-server]"
     end
   end
 
@@ -149,7 +149,7 @@ template "/etc/rabbitmq/rabbitmq.config" do
   owner "root"
   group "root"
   mode 0644
-  # notifies :restart, "service[rabbitmq-server]", :immediately
+  notifies :restart, "service[rabbitmq-server]", :immediately
 end
 
 service "rabbitmq-server" do
